@@ -30,4 +30,4 @@ gdpc.editor_tools.placeContainerBlock(editor, build_area.end, Block("minecraft:h
 road_palette = [Block(id) for id in 3*["cobblestone"] + ["andesite"] + ["gravel"]]
 
 geometry.placeCuboid(editor, (33, 119, -7), (29, 119, -11), road_palette)
-geometry.placeCuboid(editor, (33, 120, -7), (29, 120, -11), Block("air"))
+geometry.placeCuboid(editor, (33, 120, -7), (29, 150, -11), Block("air"))
