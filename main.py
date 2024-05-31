@@ -9,7 +9,7 @@ print("Loading world slice")
 worldSlice = editor.loadWorldSlice(buildRect)
 print("World slice loaded")
 heightMap = worldSlice.heightmaps["WORLD_SURFACE"]
-building_positions = [(56, 119, 33), (60, 122, 33)]
+building_positions = [(56, 119, 33), (56, 122, 19)]
 
 
 def build_roads(positions):
