@@ -9,7 +9,7 @@ print("Loading world slice")
 worldSlice = editor.loadWorldSlice(buildRect)
 print("World slice loaded")
 heightMap = worldSlice.heightmaps["WORLD_SURFACE"]
-building_positions = [(56, 119, 33), (56, 119, 19)]
+building_positions = [(56, 119, 33), (60, 122, 33)]
 
 
 def build_roads(positions):
@@ -25,13 +25,20 @@ def build_roads(positions):
                     GCD = math.gcd(additionalHorizontalChange, xDifference)
                     additionalHorizontalChange = additionalHorizontalChange / GCD
                     additionalHorizontalChangeInterval = xDifference / GCD
-                    GCD = math.gcd(xDifference, math.gcd(yDifference, zDifference))
+                    verticalGradient = int(yDifference / xDifference)
+                    additionalVerticalChange = int(((yDifference / xDifference) - horizontalGradient) * xDifference)
+                    print(additionalVerticalChange)
+                    GCD = math.gcd(additionalVerticalChange, xDifference)
+                    additionalVerticalChange = additionalVerticalChange / GCD
+                    additionalVerticalChangeInterval = xDifference / GCD
+                    print(additionalVerticalChangeInterval)
                 else:
                     horizontalGradient = zDifference
                     additionalHorizontalChange = 0
                     additionalHorizontalChangeInterval = 0
-                    GCD = math.gcd(yDifference, zDifference)
-                yInterval = yDifference / GCD
+                    verticalGradient = yDifference
+                    additionalVerticalChange = 0
+                    additionalVerticalChangeInterval = 0
                 currentX = positions[i][0]
                 currentY = positions[i][1]
                 currentZ = positions[i][2]
@@ -43,22 +50,35 @@ def build_roads(positions):
                 else:
                     xChange = 0
                 l = 0
+                m = 0
                 for k in range(xDifference + 1):
                     nextZ = currentZ + horizontalGradient
-                    if l != additionalHorizontalChange:
+                    nextY = currentY + verticalGradient
+                    print(nextY)
+                    print(currentX)
+                    if l != additionalHorizontalChangeInterval:
                         if l < additionalHorizontalChange:
                             l = l + 1
                             nextZ = nextZ + 1
-                        else:
+                        elif l > additionalHorizontalChange:
                             l = l - 1
                             nextZ = nextZ - 1
-                    elif l == additionalHorizontalChangeInterval:
+                    else:
                         l = 0
+                    if m != additionalVerticalChangeInterval:
+                        if m < additionalVerticalChange:
+                            m = m + 1
+                            nextY = nextY + 1
+                        elif m > additionalHorizontalChange:
+                            m = m - 1
+                            nextY = nextY - 1
+                    else:
+                        m = 0
                     geometry.placeCuboid(editor, (currentX, currentY, currentZ),
-                                         (currentX + xChange, currentY + yInterval, nextZ),
+                                         (currentX + xChange, nextY, nextZ),
                                          gdpc.Block("dirt_path"))
                     currentX = currentX + xChange
-                    currentY = currentY + yInterval
+                    currentY = nextY
                     currentZ = nextZ
                     if currentX == finalX:
                         break
